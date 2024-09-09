@@ -152,7 +152,7 @@ class Engine():
                 cntr = -1
                 for i in np.arange(self.deck['z'].shape[0]):
                     for j in np.arange(self.deck['M_0'].shape[0]):
-                        for k in np.flip(np.arange(self.deck['TS'].shape[0])):
+                        for k in np.arange(self.deck['TS'].shape[0]): #sorting flipped from earlier pyna versions
                             cntr = cntr + 1
 
                             for var in self.deck_variables:

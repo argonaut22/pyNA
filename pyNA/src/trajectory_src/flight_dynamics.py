@@ -129,7 +129,8 @@ class FlightDynamics(ExplicitComponent):
         if phase_name in {'groundroll', 'rotation'}:
             outputs['gamma_dot'] = np.zeros(nn)
         elif phase_name in {'liftoff', 'vnrs', 'cutback'}:
-            outputs['gamma_dot'] = ((F_n * salpha + L - airframe.mtow * self.options['sealevel_atmosphere']['g'] * cgamma) / (airframe.mtow * v))*180/np.pi
+            outputs['gamma_dot'] = ((F_n * salpha + L - airframe.mtow * self.options['sealevel_atmosphere']['g'] * cgamma) \
+                                    / (airframe.mtow * v))*180/np.pi
 
         # Compute net upward force
         outputs['n'] = (F_n * salpha + L)/(airframe.mtow * self.options['sealevel_atmosphere']['g'] * cgamma)

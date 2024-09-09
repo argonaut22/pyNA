@@ -171,6 +171,6 @@ class Airframe:
             # self.aero['c_d'] = np.load(self.pyNA_directory + '/cases/' + self.case_name + '/aircraft/c_d_a10.npy')
             
         else:
-            raise ValueError('Invalid aircraft name specified.')
+            raise ValueError('Invalid aircraft name specified: ' + self.ac_name)
 
         return None

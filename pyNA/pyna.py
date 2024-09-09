@@ -243,6 +243,7 @@ class pyna:
     def load_path_timeseries(self, timestep=None) -> None:
         """
         Loads predefined trajectory timeseries.
+        Also doubles as loading the prescribed timestep for accessing the theta-wise noise distribution.
 
         :param timestep: Time step in predefined trajectory at which to compute the noise source distribution.
         :type timestep: np.int64
@@ -355,7 +356,6 @@ class pyna:
         :return: None
         """
 
-        self.epnl_table = pd.DataFrame(epnl_table)
 
         self.levels_int_metric = 'epnl'
 
@@ -405,11 +405,13 @@ class pyna:
 
             # Save solutions
             for j in np.arange(len(self.observer_lst)):
-                epnl_table[i, j] = np.round(self.problem.get_val('noise.epnl')[j], 1)
-            epnl_table[i, j+1] = np.round(np.sum(self.problem.get_val('noise.epnl')), 1)
+                epnl_table[i, j] = np.round(self.path.get_val('noise.epnl')[j], 1)
+            epnl_table[i, j+1] = np.round(np.sum(self.path.get_val('noise.epnl')), 1)
 
         # Create data frame for solutions
         observer_lst = list(self.observer_lst) + ['take-off']
+
+        self.epnl_table = pd.DataFrame(epnl_table)
         self.epnl_table.columns = observer_lst
         self.epnl_table.index = components
 
@@ -588,8 +590,9 @@ class pyna:
             self.initialization_path = pyna.load_results(self, initialization_path_name, 'final')
             converged = True
 
-        # Check convergence
-        converged = self.initialization_path.check_convergence(filename='IPOPT_trajectory_convergence.out')
+        # Check convergence #don't think this is needed logically
+        #TODO: remove if confirmed not needed
+        # converged = self.initialization_path.check_convergence(filename='IPOPT_trajectory_convergence.out')
 
         if converged:
 
