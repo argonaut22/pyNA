@@ -152,6 +152,7 @@ class FlightDynamics(ExplicitComponent):
         if self.options['objective'] == 'noise':
             # Write k to file
             if phase_name == 'groundroll':
+                #TODO: fix the path ID thing through full module
                 f = open('/Users/laurensvoet/Documents/Research/pyNA/pyNA/cases/' + self.options['case_name'] + '/output/' + self.options['output_directory_name'] + '/' + 'inputs_k.txt' , 'a')
                 f.write(str(inputs['k_rot'][0]) + '\n')
                 f.close()

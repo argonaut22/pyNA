@@ -120,7 +120,9 @@ class Trajectory(om.Problem):
 
         self.driver.declare_coloring(tol=1e-12)
         self.model.linear_solver = om.LinearRunOnce()
-        self.driver.opt_settings['output_file'] = self.pyna_directory + '/cases/' + self.case_name + '/output/' + self.output_directory_name + '/IPOPT_trajectory_convergence.out'
+        outname = self.output_directory_name + "/" if self.output_directory_name != "" else ""
+        self.driver.opt_settings['output_file'] = self.pyna_directory + '/cases/' + self.case_name + '/output/' + outname + 'IPOPT_trajectory_convergence.out'
+    #TODO: add a "create directory" process in the save
 
         if objective == 'noise':
             self.driver.opt_settings['tol'] = 1e-3
@@ -642,12 +644,13 @@ class Trajectory(om.Problem):
 
         # Save convergence info for trajectory
         # Read IPOPT file
-        file_ipopt = open(self.pyna_directory + '/cases/' + self.case_name + '/output/' + self.output_directory_name + '/' + filename, 'r')
+        outname = self.output_directory_name + "/" if self.output_directory_name != "" else ""
+        file_ipopt = open(self.pyna_directory + '/cases/' + self.case_name + '/output/' + outname + filename, 'r')
         ipopt = file_ipopt.readlines()
         file_ipopt.close()
 
         # Check if convergence summary excel file exists
-        cnvg_file_name = self.pyna_directory + '/cases/' + self.case_name + '/output/' + self.output_directory_name + '/' + 'Convergence.csv'
+        cnvg_file_name = self.pyna_directory + '/cases/' + self.case_name + '/output/' + outname + 'Convergence.csv'
         if not os.path.isfile(cnvg_file_name):
             file_cvg = open(cnvg_file_name, 'w')
             file_cvg.writelines("Trajectory name , Execution date/time,  Converged")

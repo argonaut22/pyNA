@@ -20,12 +20,12 @@ class pyna:
     def __init__(self,
                 case_name = 'nasa_stca_standard',
                 ac_name = 'stca',
-                pyna_directory = '/Users/laurensvoet/Documents/Research/pyNA/pyNA',
-                output_directory_name = '',
-                output_file_name = 'trajectory_stca.sql',
-                engine_timeseries_name = 'Engine_to.csv',
-                engine_deck_name = 'engine_deck_stca.csv',
-                trajectory_file_name = 'Trajectory_to.csv',
+                pyna_directory = None,
+                output_directory_name = None,
+                output_file_name = None,
+                engine_timeseries_name = None,
+                engine_deck_name = None,
+                trajectory_file_name = None,
                 thrust_lapse = True,
                 atmosphere_type = 'stratified',
                 atmosphere_dT = 10.0169,
@@ -88,16 +88,25 @@ class pyna:
                 save_results = False,
                 verification = False) -> None:
         
-        # File, direcotories
+        # File, directories
         self.case_name = case_name
         self.ac_name = ac_name
         self.language = os.environ['pyna_language']
-        self.pyna_directory = pyna_directory
-        self.output_directory_name = output_directory_name
-        self.output_file_name = output_file_name
-        self.engine_timeseries_name = engine_timeseries_name
-        self.engine_deck_name = engine_deck_name
-        self.trajectory_file_name = trajectory_file_name
+        if pyna_directory is None:
+            self.pyna_directory = os.path.dirname(os.path.realpath(__file__))
+        else:
+            self.pyna_directory = pyna_directory
+        self.output_directory_name = '' \
+            if output_directory_name is None\
+            else output_directory_name
+        if output_file_name is None:
+            self.output_file_name = "trajectory_"+case_name+".sql"
+        if engine_deck_name is None:
+            self.engine_deck_name = "engine_deck_"+case_name+".csv"
+        if trajectory_file_name is None:
+            self.trajectory_file_name = "Trajectory_"+case_name+"_to.csv"
+        if engine_timeseries_name is None:
+            self.engine_timeseries_name = "Engine_"+case_name+"_to.csv"
         
         # Trajectory
         self.thrust_lapse = thrust_lapse
@@ -228,8 +237,8 @@ class pyna:
         return None
 
     def load_pyna_config(self) -> None:
-
-        return None
+        #TODO: god knows what laurens was thinking for this
+        raise NotImplementedError        
 
     def load_path_timeseries(self, timestep=None) -> None:
         """
@@ -1022,6 +1031,7 @@ class pyna:
         path['gamma [deg]'] = np.interp(t_intp, t_source, problem.get_val('trajectory.gamma'))
         path['Airframe LG [-]'] = np.interp(t_intp, t_source, problem.get_val('trajectory.I_landing_gear'))
         path['Airframe delta_f [deg]'] = np.interp(t_intp, t_source, problem.get_val('trajectory.theta_flaps'))
+        path['Airframe delta_s [deg]'] = np.interp(t_intp, t_source, problem.get_val('trajectory.theta_slats'))
 
         # Engine file
         engine = pd.DataFrame()
