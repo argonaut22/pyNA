@@ -28,7 +28,7 @@ class Propulsion(om.MetaModelStructuredComp):
         self.options.declare('vec_size', types=int, default=1, desc='Number of points to evaluate at once.')
         self.options.declare('extrapolate', types=bool, default=False, desc='Sets whether extrapolation should be performed when an input is out of bounds.')
         self.options.declare('training_data_gradients', types=bool, default=False, desc='Sets whether gradients with respect to output training data should be computed.')
-        self.options.declare('method', values=TABLE_METHODS, default='scipy_cubic', desc='Spline interpolation method to use for all outputs.')
+        self.options.declare('method', values=TABLE_METHODS, default='scipy_slinear', desc='interpolation method to use for all outputs.')
         self.options.declare('engine', types=Engine)
         self.options.declare('atmosphere_type', types=str)
 

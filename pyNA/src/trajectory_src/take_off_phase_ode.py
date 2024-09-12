@@ -50,7 +50,7 @@ class TakeOffPhaseODE(om.Group):
 
         # Aerodynamics module
         self.add_subsystem(name='clcd',
-                        subsys=CLCD(vec_size=nn, extrapolate=True, method='3D-lagrange3', airframe=self.options['airframe']),
+                        subsys=CLCD(vec_size=nn, extrapolate=True, method='scipy_slinear', airframe=self.options['airframe']),
                         promotes_inputs=['alpha', 'theta_flaps', 'theta_slats'],
                         promotes_outputs=[])
 
@@ -70,12 +70,12 @@ class TakeOffPhaseODE(om.Group):
         # Propulsion module
         if self.options['atmosphere_type'] == 'stratified':
             self.add_subsystem(name='propulsion',
-                            subsys=Propulsion(vec_size=nn, extrapolate=True, method='3D-lagrange3', engine=self.options['engine'], atmosphere_type=self.options['atmosphere_type']),
+                            subsys=Propulsion(vec_size=nn, extrapolate=False, method='scipy_slinear', engine=self.options['engine'], atmosphere_type=self.options['atmosphere_type']),
                             promotes_inputs=['z'],
                             promotes_outputs=[])
         else:
             self.add_subsystem(name='propulsion',
-                            subsys=Propulsion(vec_size=nn, extrapolate=True, method='slinear', engine=self.options['engine'], atmosphere_type=self.options['atmosphere_type']),
+                            subsys=Propulsion(vec_size=nn, extrapolate=False, method='scipy_slinear', engine=self.options['engine'], atmosphere_type=self.options['atmosphere_type']),
                             promotes_inputs=[],
                             promotes_outputs=[])
         self.connect('aerodynamics.M_0', 'propulsion.M_0')
