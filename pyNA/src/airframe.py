@@ -146,7 +146,7 @@ class Airframe:
         :return: None
         """
 
-        if self.ac_name == 'stca':
+        if self.ac_name == 'stca' or self.ac_name == 'stca_orig':
             # Load data 
             self.aero['alpha'] = np.array([-2.,  0.,  2.,  4.,  6.,  8., 10., 12., 15., 18., 21., 23., 25.])
             self.aero['theta_flaps'] = np.array([ 0.,  2.,  4.,  6.,  8., 10., 12., 14., 16., 18., 20., 22., 24., 26.])
@@ -169,7 +169,15 @@ class Airframe:
             # self.aero['c_l'] = np.load(self.pyNA_directory + '/cases/' + self.case_name + '/aircraft/c_l_a10.npy')
             # self.aero['c_l_max'] = np.load(self.pyNA_directory + '/cases/' + self.case_name + '/aircraft/c_l_max_a10.npy')
             # self.aero['c_d'] = np.load(self.pyNA_directory + '/cases/' + self.case_name + '/aircraft/c_d_a10.npy')
-            
+        
+        elif self.ac_name == "tasopt_default":
+            self.aero['alpha'] = np.array(list(range(-2, 23, 2)))
+            self.aero['theta_flaps'] = np.array([0])
+            self.aero['theta_slats'] = np.array([0])
+            self.aero['c_l'] = np.load(self.pyna_directory + '/cases/' + self.case_name + '/aircraft/c_l_tasopt_default.npy', allow_pickle=True)
+            self.aero['c_l_max'] = np.load(self.pyna_directory + '/cases/' + self.case_name + '/aircraft/c_l_max_tasopt_default.npy', allow_pickle=True)
+            self.aero['c_d'] = np.load(self.pyna_directory + '/cases/' + self.case_name + '/aircraft/c_d_tasopt_default.npy', allow_pickle=True)
+
         else:
             raise ValueError('Invalid aircraft name specified: ' + self.ac_name)
 
