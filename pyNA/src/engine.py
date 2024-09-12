@@ -20,7 +20,7 @@ class Engine():
         self.deck = dict()
         self.deck_variables = dict()
         
-    def get_timeseries(self, timestep=0) -> None:
+    def get_timeseries(self, timestep=None) -> None:
         
         """
         Load engine timeseries from .csv file.
@@ -33,17 +33,20 @@ class Engine():
 
         # Load raw inputs from .csv file
         # Source: validation noise assessment data set of NASA STCA (Berton et al., 2019)
-        self.timeseries = pd.read_csv(self.pyna_directory + '/cases/' + self.case_name + '/engine/' + self.output_directory_name + '/' + self.engine_timeseries_name)
-        
-        # Select operating point
-        cols = self.timeseries.columns
-        op_point = pd.DataFrame(np.reshape(self.timeseries.values[timestep, :], (1, len(cols))))
-        op_point.columns = cols
+        outname = self.output_directory_name + "/" if self.output_directory_name != "" else ""
+        self.timeseries = pd.read_csv(self.pyna_directory + '/cases/' + self.case_name + '/engine/' + outname + self.engine_timeseries_name)
 
-        # Duplicate operating for theta range (np.linspace(0, 180, 19))
-        self.timeseries = pd.DataFrame()
-        for _ in np.arange(19):
-            self.timeseries = self.timeseries.append(op_point)
+        #if noise source distribution calculation (mode str param not passed here)
+        if timestep is not None:
+            # Select operating point
+            cols = self.timeseries.columns
+            # op_point = pd.DataFrame(np.reshape(self.timeseries.values[timestep, :], (1, len(cols))))
+            op_point = self.timeseries.iloc[[timestep]] #access row as a dataframe itself
+            op_point.columns = cols
+
+            # Duplicate operating for theta range (np.linspace(0, 180, 19))
+            dfs = [op_point] * 19
+            self.timeseries = pd.concat(dfs, ignore_index=True)
 
         return None
 
