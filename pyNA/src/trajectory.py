@@ -275,39 +275,39 @@ class Trajectory(om.Problem):
                     self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.t_s_' + str(j))
 
                 elif var in ['x', 'v']:
-                    self.model.connect('phases.' + phase_name + '.interpolated.states:' + var, 'trajectory.' + var + '_' + str(j))
+                    self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
 
                 elif var in ['z', 'gamma']:
                     if phase_name in {'groundroll','rotation'}:
-                        self.model.connect('phases.' + phase_name + '.interpolated.parameters:' + var, 'trajectory.' + var + '_' + str(j))
+                        self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
                     else:
-                        self.model.connect('phases.' + phase_name + '.interpolated.states:' + var, 'trajectory.' + var + '_' + str(j))
+                        self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
 
                 elif var in ['alpha']:
                     if phase_name in {'groundroll'}:
-                        self.model.connect('phases.' + phase_name + '.interpolated.parameters:' + var,'trajectory.' + var + '_' + str(j))
+                        self.model.connect('phases.' + phase_name + '.interpolated.' + var,'trajectory.' + var + '_' + str(j))
                     # elif phase_name in {'rotation', 'liftoff'}:
                     elif phase_name in {'rotation'}:
-                        self.model.connect('phases.' + phase_name + '.interpolated.states:' + var,'trajectory.' + var + '_' + str(j))
+                        self.model.connect('phases.' + phase_name + '.interpolated.' + var,'trajectory.' + var + '_' + str(j))
                     else:
-                        self.model.connect('phases.' + phase_name + '.interpolated.controls:' + var, 'trajectory.' + var + '_' + str(j))
+                        self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
 
                 elif var in ['TS']:
                     if objective == 'noise' and ptcb:
                         if phase_name in ['groundroll', 'rotation', 'liftoff']:
-                            self.model.connect('phases.' + phase_name + '.interpolated.parameters:' + var, 'trajectory.' + var + '_' + str(j))
+                            self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
                         elif phase_name == 'vnrs':
-                            self.model.connect('phases.' + phase_name + '.interpolated.controls:' + var, 'trajectory.' + var + '_' + str(j))
+                            self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
                         elif phase_name == 'cutback':
-                            self.model.connect('phases.' + phase_name + '.interpolated.parameters:' + var, 'trajectory.' + var + '_' + str(j))
+                            self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
                     else:
                         if phase_name in ['groundroll', 'rotation', 'liftoff', 'vnrs']:
-                            self.model.connect('phases.' + phase_name + '.interpolated.parameters:' + var, 'trajectory.' + var + '_' + str(j))
+                            self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
                         elif phase_name == 'cutback':
-                            self.model.connect('phases.' + phase_name + '.interpolated.parameters:' + var, 'trajectory.' + var + '_' + str(j))
+                            self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
 
                 elif var in ['theta_flaps', 'theta_slats', 'y', 'I_landing_gear']:
-                    self.model.connect('phases.' + phase_name + '.interpolated.parameters:' + var, 'trajectory.' + var + '_' + str(j))
+                    self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
 
                 elif var in ['L', 'D', 'eas', 'n','M_0', 'p_0','rho_0', 'T_0', 'c_0', 'c_bar', 'mu_0', 'I_0', 'mdot_NOx', 'EINOx', 'c_l', 'c_d', 'c_l_max']:
                     self.model.connect('phases.' + phase_name + '.interpolated.' + var, 'trajectory.' + var + '_' + str(j))
